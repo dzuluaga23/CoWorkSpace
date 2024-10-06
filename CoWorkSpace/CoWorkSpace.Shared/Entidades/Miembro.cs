@@ -32,5 +32,10 @@ namespace CoWorkSpace.Shared.Entidades
         [MaxLength(10, ErrorMessage = "El Telefono no puede tener más de 10 caracteres")]
         public string TelefonoMovil { get; set; }
 
+        [JsonIgnore]
+        public ICollection<Reserva> Reservas { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Inscripcion> Inscripcions { get; set; }
     }
 }

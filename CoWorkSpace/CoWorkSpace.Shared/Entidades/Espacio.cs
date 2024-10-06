@@ -26,5 +26,11 @@ namespace CoWorkSpace.Shared.Entidades
         [Required(ErrorMessage = "La cantidad máxima es obligatoria")]
         public int CantidadMax { get; set; }
 
+        [JsonIgnore]
+        public ICollection<Asignacion> Asignacions { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Reserva> Reservas { get; set; }
+
     }
 }

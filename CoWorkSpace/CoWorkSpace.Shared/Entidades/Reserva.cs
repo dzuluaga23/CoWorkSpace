@@ -31,5 +31,13 @@ namespace CoWorkSpace.Shared.Entidades
         [DisplayFormat(DataFormatString = "{0:hh\\:mm", ApplyFormatInEditMode = true)]
         public TimeSpan HoraFinal { get; set; }
 
+        [JsonIgnore]
+        public Miembro Miembros { get; set; }
+        public int MiembroId { get; set; }
+
+        [JsonIgnore]
+        public Espacio Espacios { get; set; }
+        public int EspacioId { get; set; }
+
     }
 }

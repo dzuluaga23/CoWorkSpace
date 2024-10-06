@@ -22,5 +22,8 @@ namespace CoWorkSpace.Shared.Entidades
         [Required(ErrorMessage = "La descripción es obligatorio")]
         public string Descripcion { get; set; }
 
+        [JsonIgnore]
+        public ICollection<Asignacion> Asignacions { get; set; }
+
     }
 }

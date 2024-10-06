@@ -11,6 +11,12 @@ namespace CoWorkSpace.Shared.Entidades
     {
         public int Id { get; set; }
 
-        
+        [JsonIgnore]
+        public Recurso Recursos { get; set; }
+        public int RecursoId { get; set; }
+
+        [JsonIgnore]
+        public Espacio Espacio { get; set; }
+        public int EspacioId { get; set; }
     }
 }

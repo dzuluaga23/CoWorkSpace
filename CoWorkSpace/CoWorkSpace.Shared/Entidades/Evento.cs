@@ -36,5 +36,8 @@ namespace CoWorkSpace.Shared.Entidades
         [Display(Name = "Cantidad máxima del evento")]
         [Required(ErrorMessage = "La cantidad máxima del evento es obligatoria")]
         public int CantidadMax { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Inscripcion> Inscripcions { get; set; }
     }
 }
