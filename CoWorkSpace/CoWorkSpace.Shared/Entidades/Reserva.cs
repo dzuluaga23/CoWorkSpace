@@ -23,13 +23,13 @@ namespace CoWorkSpace.Shared.Entidades
         [Required(ErrorMessage = "Obligatoria")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:hh\\:mm", ApplyFormatInEditMode = true)]
-        public TimeSpan HoraInicio { get; set; }
+        public DateTime HoraInicio { get; set; }
 
         [Display(Name = "Hora Final reserva")]
         [Required(ErrorMessage = "Obligatoria")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:hh\\:mm", ApplyFormatInEditMode = true)]
-        public TimeSpan HoraFinal { get; set; }
+        public DateTime HoraFinal { get; set; }
 
         [JsonIgnore]
         public Miembro Miembros { get; set; }

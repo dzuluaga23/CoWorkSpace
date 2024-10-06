@@ -31,7 +31,7 @@ namespace CoWorkSpace.Shared.Entidades
         [Required(ErrorMessage = "La hora del evento es obligatoria")]
         [DataType(DataType.Time)]
         [DisplayFormat(DataFormatString = "{0:hh\\:mm}", ApplyFormatInEditMode = true)]
-        public TimeSpan Hora { get; set; }
+        public DateTime Hora { get; set; }
 
         [Display(Name = "Cantidad máxima del evento")]
         [Required(ErrorMessage = "La cantidad máxima del evento es obligatoria")]

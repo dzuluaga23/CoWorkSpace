@@ -90,8 +90,8 @@ namespace CoWorkSpace.API.Migrations
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
 
-                    b.Property<TimeSpan>("Hora")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("Hora")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -163,6 +163,9 @@ namespace CoWorkSpace.API.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
 
+                    b.Property<int>("MembresiaId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -173,6 +176,8 @@ namespace CoWorkSpace.API.Migrations
                         .HasColumnType("nvarchar(10)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MembresiaId");
 
                     b.ToTable("Miembros");
                 });
@@ -214,11 +219,11 @@ namespace CoWorkSpace.API.Migrations
                     b.Property<DateTime>("FechaReserva")
                         .HasColumnType("datetime2");
 
-                    b.Property<TimeSpan>("HoraFinal")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("HoraFinal")
+                        .HasColumnType("datetime2");
 
-                    b.Property<TimeSpan>("HoraInicio")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("HoraInicio")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("MiembroId")
                         .HasColumnType("int");
@@ -268,6 +273,17 @@ namespace CoWorkSpace.API.Migrations
                     b.Navigation("Eventos");
 
                     b.Navigation("Miembros");
+                });
+
+            modelBuilder.Entity("CoWorkSpace.Shared.Entidades.Miembro", b =>
+                {
+                    b.HasOne("CoWorkSpace.Shared.Entidades.Membresia", "Membresias")
+                        .WithMany()
+                        .HasForeignKey("MembresiaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Membresias");
                 });
 
             modelBuilder.Entity("CoWorkSpace.Shared.Entidades.Reserva", b =>

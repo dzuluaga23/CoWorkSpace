@@ -33,6 +33,10 @@ namespace CoWorkSpace.Shared.Entidades
         public string TelefonoMovil { get; set; }
 
         [JsonIgnore]
+        public Membresia Membresias { get; set; }
+        public int MembresiaId { get; set; }
+
+        [JsonIgnore]
         public ICollection<Reserva> Reservas { get; set; }
 
         [JsonIgnore]
