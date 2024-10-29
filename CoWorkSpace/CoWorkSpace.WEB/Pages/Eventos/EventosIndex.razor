@@ -1,0 +1,229 @@
+﻿@page "/eventos"
+
+@using CurrieTechnologies.Razor.SweetAlert2
+
+@using CoWorkSpace.Shared.Entidades
+
+@using CoWorkSpace.WEB.Repositories
+
+@using CoWorkSpace.WEB.Shared
+
+@inject IRepository repository
+
+@inject NavigationManager navigationManager
+
+@inject SweetAlertService swal
+
+
+
+<h3>Eventos Index</h3>
+
+
+
+
+
+<div class="mb-3">
+
+
+
+    <a class="btn btn-primary" href="/eventos/Create">Crear Evento</a>
+
+</div>
+
+
+
+
+
+<GenericList MyList="Eventos">
+
+    <Body>
+
+        <table class="table table-striped">
+
+            <thead>
+
+                <tr>
+
+                    <th>Evento</th>
+
+                </tr>
+
+
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var evento in Eventos)
+
+                {
+
+                    <tr>
+
+                        <td>
+
+                            @evento.Nombre
+
+                        </td>
+
+                        <td>
+
+                            @evento.Descripcion
+
+                        </td>
+
+
+
+                        <td>
+
+                            @evento.Fecha
+
+                        </td>
+
+
+
+                        <td>
+
+                            @evento.Hora
+
+                        </td>
+
+
+
+                        <td>
+
+                            @evento.CantidadMax
+
+                        </td>
+
+                        <td>
+
+                            <a href="/Eventos/edit/@evento.Id" class="btn btn-warning btn-sm"><i class="oi oi-pencil" /> Editar</a>
+
+                            <button class="btn btn-danger btn-sm" @onclick=@(() => DeleteAsync(evento))><i class="oi oi-trash" /> Borrar</button>
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+
+
+    </Body>
+
+
+
+</GenericList>
+
+
+@code {
+
+
+
+    public List<Evento> Eventos { get; set; }
+
+
+
+    protected async override Task OnInitializedAsync()
+
+    {
+
+        await Load();
+
+    }
+
+
+
+    private async Task Load()
+
+    {
+
+        var responseHppt = await repository.GetAsync<List<Evento>>("/api/Eventos");
+
+        Eventos = responseHppt.Response!;
+
+    }
+
+
+
+    private async Task DeleteAsync(Evento Evento)
+
+    {
+
+        var result = await swal.FireAsync(new SweetAlertOptions
+
+            {
+
+                Title = "Confirmación",
+
+                Text = "¿Esta seguro que quieres borrar el registro?",
+
+                Icon = SweetAlertIcon.Question,
+
+                ShowCancelButton = true
+
+            });
+
+
+
+        var confirm = string.IsNullOrEmpty(result.Value);
+
+
+
+        if (confirm)
+
+        {
+
+            return;
+
+        }
+
+
+
+        var responseHTTP = await repository.DeleteAsync<Evento>($"api/Eventos/{Evento.Id}");
+
+
+
+        if (responseHTTP.Error)
+
+        {
+
+            if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+
+            {
+
+                navigationManager.NavigateTo("/");
+
+            }
+
+            else
+
+            {
+
+                var mensajeError = await responseHTTP.GetErrorMessageAsync();
+
+                await swal.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+
+            }
+
+        }
+
+        else
+
+        {
+
+            await Load();
+
+        }
+
+    }
+
+}
+
+
+
+
+

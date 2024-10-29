@@ -1,0 +1,134 @@
+﻿@page "/eventos/edit/{id:int}" 
+@inject NavigationManager navigationManager 
+@inject IRepository repository 
+@inject SweetAlertService swal 
+
+  
+
+  
+
+<h3>Evento Edit</h3> 
+
+  
+
+@if(evento is null) 
+
+{ 
+
+    <p>Cargando ...</p> 
+
+} 
+
+else 
+
+{ 
+
+    <EventosForm @ref="eventoForm"  Evento="evento" OnSubmit="Edit" ReturnAction="Return" /> 
+
+} 
+
+@code { 
+
+  
+
+    private Evento evento; 
+
+    private EventosForm eventoForm; 
+
+    [Parameter] 
+
+    public int Id { get; set; } 
+
+  
+
+    protected override async Task OnInitializedAsync() 
+
+    { 
+
+        var responseHTTP = await repository.GetAsync<Evento>($"api/eventos/{Id}"); 
+
+  
+
+        if (responseHTTP.Error) 
+
+        { 
+
+            if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound) 
+
+            { 
+
+                navigationManager.NavigateTo("eventos"); 
+
+            } 
+
+            else 
+
+            { 
+
+                var messageError = await responseHTTP.GetErrorMessageAsync(); 
+
+                await swal.FireAsync("Error", messageError, SweetAlertIcon.Error); 
+
+            } 
+
+        } 
+
+        else 
+
+        { 
+
+            evento = responseHTTP.Response; 
+
+        } 
+
+    } 
+
+  
+
+    private async Task Edit() 
+
+    { 
+
+        var responseHTTP = await repository.PutAsync("api/eventos", evento); 
+
+  
+
+        if (responseHTTP.Error) 
+
+        { 
+
+            var mensajeError = await responseHTTP.GetErrorMessageAsync(); 
+
+            await swal.FireAsync("Error", mensajeError, SweetAlertIcon.Error); 
+
+        } 
+
+        else 
+
+        { 
+
+            eventoForm!.FormPostedSuccessfully = true; 
+
+            navigationManager.NavigateTo("eventos"); 
+
+        } 
+
+    } 
+
+  
+
+    private void Return() 
+
+    { 
+
+        navigationManager.NavigateTo("eventos"); 
+
+    } 
+
+} 
+
+ 
+
+ 
+
+ 

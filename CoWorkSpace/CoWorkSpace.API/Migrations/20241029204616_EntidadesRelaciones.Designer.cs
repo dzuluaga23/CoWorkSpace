@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoWorkSpace.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241029165900_EntidadesRelaciones")]
+    [Migration("20241029204616_EntidadesRelaciones")]
     partial class EntidadesRelaciones
     {
         /// <inheritdoc />

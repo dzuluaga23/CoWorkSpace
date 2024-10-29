@@ -1,0 +1,71 @@
+﻿@page "/eventos/create" 
+
+  
+
+@inject IRepository repository 
+
+  
+
+@inject NavigationManager navigationManager 
+
+  
+
+@inject SweetAlertService sweetAlertService 
+
+  
+
+  
+
+<h3>Evento Create</h3> 
+
+  
+
+<EventosForm @ref="eventoForm"  Evento="evento" OnSubmit="Create" ReturnAction="Return" /> 
+
+  
+
+@code { 
+
+    private Evento evento = new(); 
+
+    private EventosForm eventoForm; 
+
+  
+
+    private async Task Create() 
+
+    { 
+
+  
+
+        var responseHttp = await repository.PostAsync("/api/eventos", evento); 
+
+        if (responseHttp.Error) 
+
+        { 
+
+            var message = await responseHttp.GetErrorMessageAsync(); 
+
+            await sweetAlertService.FireAsync("Error", message); 
+
+            return; 
+
+        } 
+
+  
+
+        navigationManager.NavigateTo("/Eventos"); 
+
+    } 
+
+  
+
+    private void Return() 
+
+    { 
+
+        navigationManager.NavigateTo("/Eventos"); 
+
+    } 
+
+} 
