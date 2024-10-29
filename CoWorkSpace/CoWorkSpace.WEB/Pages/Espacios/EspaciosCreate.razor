@@ -1,0 +1,59 @@
+﻿@page "/espacios/create" 
+
+@inject IRepository repository 
+@inject NavigationManager navigationManager 
+
+@inject SweetAlertService sweetAlertService 
+
+
+<h3>Espacio Create</h3> 
+
+<EspaciosForm @ref="espacioForm"  Espacio="espacio" OnSubmit="Create" ReturnAction="Return" /> 
+
+  
+
+@code { 
+
+    private Espacio espacio = new(); 
+
+    private EspaciosForm espacioForm; 
+
+  
+
+    private async Task Create() 
+
+    { 
+
+  
+
+        var responseHttp = await repository.PostAsync("/api/espacios", espacio); 
+
+        if (responseHttp.Error) 
+
+        { 
+
+            var message = await responseHttp.GetErrorMessageAsync(); 
+
+            await sweetAlertService.FireAsync("Error", message); 
+
+            return; 
+
+        } 
+
+  
+
+        navigationManager.NavigateTo("/Espacios"); 
+
+    } 
+
+  
+
+    private void Return() 
+
+    { 
+
+        navigationManager.NavigateTo("/Espacios"); 
+
+    } 
+
+} 

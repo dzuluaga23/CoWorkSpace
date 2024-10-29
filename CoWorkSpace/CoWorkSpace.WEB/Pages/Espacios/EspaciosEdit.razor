@@ -1,0 +1,128 @@
+﻿@page "/espacios/edit/{id:int}" 
+@inject NavigationManager navigationManager 
+@inject IRepository repository 
+@inject SweetAlertService swal   
+
+<h3>Espacio Edit</h3> 
+
+@if(espacio is null) 
+
+{ 
+
+    <p>Cargando ...</p> 
+
+} 
+
+else 
+
+{ 
+
+    <EspaciosForm @ref="espacioForm"  Espacio="espacio" OnSubmit="Edit" ReturnAction="Return" /> 
+
+} 
+
+@code { 
+
+  
+
+    private Espacio espacio; 
+
+    private EspaciosForm espacioForm; 
+
+    [Parameter] 
+
+    public int Id { get; set; } 
+
+  
+
+    protected override async Task OnInitializedAsync() 
+
+    { 
+
+        var responseHTTP = await repository.GetAsync<Espacio>($"api/espacios/{Id}"); 
+
+  
+
+        if (responseHTTP.Error) 
+
+        { 
+
+            if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound) 
+
+            { 
+
+                navigationManager.NavigateTo("espacios"); 
+
+            } 
+
+            else 
+
+            { 
+
+                var messageError = await responseHTTP.GetErrorMessageAsync(); 
+
+                await swal.FireAsync("Error", messageError, SweetAlertIcon.Error); 
+
+            } 
+
+        } 
+
+        else 
+
+        { 
+
+            espacio = responseHTTP.Response; 
+
+        } 
+
+    } 
+
+  
+
+    private async Task Edit() 
+
+    { 
+
+        var responseHTTP = await repository.PutAsync("api/espacios", espacio); 
+
+  
+
+        if (responseHTTP.Error) 
+
+        { 
+
+            var mensajeError = await responseHTTP.GetErrorMessageAsync(); 
+
+            await swal.FireAsync("Error", mensajeError, SweetAlertIcon.Error); 
+
+        } 
+
+        else 
+
+        { 
+
+            espacioForm!.FormPostedSuccessfully = true; 
+
+            navigationManager.NavigateTo("espacios"); 
+
+        } 
+
+    } 
+
+  
+
+    private void Return() 
+
+    { 
+
+        navigationManager.NavigateTo("espacios"); 
+
+    } 
+
+} 
+
+ 
+
+ 
+
+ 

@@ -1,0 +1,122 @@
+﻿@page "/recursos/edit/{id:int}" 
+@inject NavigationManager navigationManager 
+@inject IRepository repository 
+@inject SweetAlertService swal 
+
+<h3>Recurso Edit</h3> 
+
+@if(recurso is null) 
+
+{ 
+
+    <p>Cargando ...</p> 
+
+} 
+
+else 
+
+{ 
+
+    <RecursosForm @ref="recursoForm"  Recurso="recurso" OnSubmit="Edit" ReturnAction="Return" /> 
+
+} 
+
+@code { 
+
+    private Recurso recurso; 
+
+    private RecursosForm recursoForm; 
+
+    [Parameter] 
+
+    public int Id { get; set; } 
+
+    protected override async Task OnInitializedAsync() 
+
+    { 
+
+        var responseHTTP = await repository.GetAsync<Recurso>($"api/recursos/{Id}"); 
+
+        if (responseHTTP.Error) 
+
+        { 
+
+            if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound) 
+
+            { 
+
+                navigationManager.NavigateTo("recursos"); 
+
+            } 
+
+            else 
+
+            { 
+
+                var messageError = await responseHTTP.GetErrorMessageAsync(); 
+
+                await swal.FireAsync("Error", messageError, SweetAlertIcon.Error); 
+
+            } 
+
+        } 
+
+        else 
+
+        { 
+
+            recurso = responseHTTP.Response; 
+
+        } 
+
+    } 
+
+  
+
+    private async Task Edit() 
+
+    { 
+
+        var responseHTTP = await repository.PutAsync("api/recursos", recurso); 
+
+  
+
+        if (responseHTTP.Error) 
+
+        { 
+
+            var mensajeError = await responseHTTP.GetErrorMessageAsync(); 
+
+            await swal.FireAsync("Error", mensajeError, SweetAlertIcon.Error); 
+
+        } 
+
+        else 
+
+        { 
+
+            recursoForm!.FormPostedSuccessfully = true; 
+
+            navigationManager.NavigateTo("recursos"); 
+
+        } 
+
+    } 
+
+  
+
+    private void Return() 
+
+    { 
+
+        navigationManager.NavigateTo("recursos"); 
+
+    } 
+
+} 
+
+ 
+
+ 
+
+ 

@@ -1,0 +1,46 @@
+﻿@page "/recursos/create" 
+@inject IRepository repository 
+@inject NavigationManager navigationManager 
+
+@inject SweetAlertService sweetAlertService 
+
+<h3>Recurso Create</h3> 
+
+<RecursosForm @ref="recursoForm"  Recurso="recurso" OnSubmit="Create" ReturnAction="Return" /> 
+
+  
+
+@code { 
+
+    private Recurso recurso = new(); 
+
+    private RecursosForm recursoForm; 
+
+    private async Task Create() 
+
+    { 
+        var responseHttp = await repository.PostAsync("/api/recursos", recurso); 
+
+        if (responseHttp.Error) 
+
+        { 
+
+            var message = await responseHttp.GetErrorMessageAsync(); 
+
+            await sweetAlertService.FireAsync("Error", message); 
+
+            return; 
+
+        } 
+
+        navigationManager.NavigateTo("/Recursos"); 
+
+    } 
+    private void Return() 
+
+    { 
+
+        navigationManager.NavigateTo("/Recursos"); 
+    } 
+
+} 
