@@ -48,18 +48,12 @@
         </div>
     </div>
 
-
     <div class="mb-3">
-
         <label>Hora:</label>
-
         <div>
-
-            <InputDate @bind-Value="Evento.Hora" />
-
-            <ValidationMessage For="@(()=>Evento.Hora)" />
+            <input type="time" @bind="Evento.Hora" class="form-control" />
+            <ValidationMessage For="@(() => Evento.Hora)" />
         </div>
-
     </div>
 
     <div class="mb-3">
