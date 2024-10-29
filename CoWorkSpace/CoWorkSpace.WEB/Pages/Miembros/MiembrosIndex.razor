@@ -1,0 +1,239 @@
+﻿
+
+@page "/miembros"
+
+
+<!--CAMBIAR EL NOMBRE DEL PROYECTO-->
+@using CurrieTechnologies.Razor.SweetAlert2
+
+@using CoWorkSpace.Shared.Entidades
+
+@using CoWorkSpace.WEB.Repositories
+
+@using CoWorkSpace.WEB.Shared
+
+
+
+@inject IRepository repository
+
+@inject NavigationManager navigationManager
+
+@inject SweetAlertService swal
+
+
+<!--CAMBIAR EL NOMBRE POR LA CLASE QUE SE ESTÁ TRABAJANDO-->
+<h3>Miembros</h3>
+
+
+
+
+
+<div class="mb-3">
+
+
+    <!--CAMBIAR EL NOMBRE POR LA CLASE QUE SE ESTÁ TRABAJANDO-->
+    <a class="btn btn-primary" href="/miembros/Create">Crear Miembro</a>
+
+</div>
+
+
+
+
+
+<GenericList MyList="Miembros">
+
+    <Body>
+
+        <table class="table table-striped">
+
+            <thead>
+
+                <tr>
+
+                    <th>Miembro</th>
+
+                </tr>
+
+
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var miembro in Miembros)
+
+                {
+
+                    <tr>
+
+                        <td>
+
+                            @miembro.Nombre
+
+                        </td>
+
+
+
+                        <td>
+
+                            @miembro.Apellido
+
+                        </td>
+
+
+
+                        <td>
+
+                            @miembro.Email
+
+                        </td>
+
+
+
+                        <td>
+
+                            @miembro.TelefonoMovil
+
+                        </td>
+
+                        <td>
+
+                            <a href="/Miembros/edit/@miembro.Id" class="btn btn-warning btn-sm"><i class="oi oi-pencil" /> Editar</a>
+
+                            <button class="btn btn-danger btn-sm" @onclick=@(() => DeleteAsync(miembro))><i class="oi oi-trash" /> Borrar</button>
+
+
+
+
+
+                        </td>
+
+
+
+                    </tr>
+
+                }
+
+            </tbody>
+
+
+
+
+
+
+
+        </table>
+
+
+
+    </Body>
+
+
+
+</GenericList>
+
+
+
+@code {
+
+
+
+    public List<Miembro> Miembros { get; set; }
+
+
+
+    protected async override Task OnInitializedAsync()
+
+    {
+
+        await Load();
+
+    }
+
+
+
+    private async Task Load()
+
+    {
+
+        var responseHppt = await repository.GetAsync<List<Miembro>>("/api/miembros");
+
+        Miembros = responseHppt.Response!;
+
+    }
+
+
+
+    private async Task DeleteAsync(Miembro Miembro)
+
+    {
+
+        var result = await swal.FireAsync(new SweetAlertOptions
+
+            {
+
+                Title = "Confirmación",
+
+                Text = "¿Esta seguro que quieres borrar el registro?",
+
+                Icon = SweetAlertIcon.Question,
+
+                ShowCancelButton = true
+
+            });
+
+
+
+        var confirm = string.IsNullOrEmpty(result.Value);
+
+
+
+        if (confirm)
+
+        {
+
+            return;
+
+        }
+
+
+
+        var responseHTTP = await repository.DeleteAsync<Miembro>($"api/miembros/{Miembro.Id}");
+
+
+
+        if (responseHTTP.Error)
+
+        {
+
+            if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+
+            {
+
+                navigationManager.NavigateTo("/");
+
+            }
+
+            else
+
+            {
+
+                var mensajeError = await responseHTTP.GetErrorMessageAsync();
+
+                await swal.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+
+            }
+
+        }
+
+        else
+
+        {
+
+            await Load();
+
+        }
+
+    }
+
+} 

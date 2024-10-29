@@ -1,0 +1,137 @@
+﻿@page "/miembros/edit/{id:int}" 
+
+@inject NavigationManager navigationManager 
+
+@inject IRepository repository 
+
+@inject SweetAlertService swal 
+
+  
+
+  
+
+<h3>Miembros Edit</h3> 
+
+  
+
+@if(miembro is null) 
+
+{ 
+
+    <p>Cargando ...</p> 
+
+} 
+
+else 
+
+{ 
+
+    <MiembrosForm @ref="miembrosForm"  Miembro="miembro" OnSubmit="Edit" ReturnAction="Return" /> 
+
+} 
+
+  
+
+  
+
+  
+
+@code { 
+
+  
+
+    private Miembro miembro; 
+
+    private MiembrosForm miembrosForm; 
+
+    [Parameter] 
+
+    public int Id { get; set; } 
+
+  
+
+    protected override async Task OnInitializedAsync() 
+
+    { 
+
+        var responseHTTP = await repository.GetAsync<Miembro>($"api/miembros/{Id}"); 
+
+  
+
+        if (responseHTTP.Error) 
+
+        { 
+
+            if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound) 
+
+            { 
+
+                navigationManager.NavigateTo("miembros"); 
+
+            } 
+
+            else 
+
+            { 
+
+                var messageError = await responseHTTP.GetErrorMessageAsync(); 
+
+                await swal.FireAsync("Error", messageError, SweetAlertIcon.Error); 
+
+            } 
+
+        } 
+
+        else 
+
+        { 
+
+            miembro = responseHTTP.Response; 
+
+        } 
+
+    } 
+
+  
+
+    private async Task Edit() 
+
+    { 
+
+        var responseHTTP = await repository.PutAsync("api/miembros", miembro); 
+
+  
+
+        if (responseHTTP.Error) 
+
+        { 
+
+            var mensajeError = await responseHTTP.GetErrorMessageAsync(); 
+
+            await swal.FireAsync("Error", mensajeError, SweetAlertIcon.Error); 
+
+        } 
+
+        else 
+
+        { 
+
+            miembrosForm!.FormPostedSuccessfully = true; 
+
+            navigationManager.NavigateTo("miembros"); 
+
+        } 
+
+    } 
+
+  
+
+    private void Return() 
+
+    { 
+
+        navigationManager.NavigateTo("miembros"); 
+
+    } 
+
+} 

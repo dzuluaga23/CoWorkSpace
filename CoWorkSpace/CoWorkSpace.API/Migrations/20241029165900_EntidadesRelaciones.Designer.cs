@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoWorkSpace.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241006185738_entidadesRelaciones")]
-    partial class entidadesRelaciones
+    [Migration("20241029165900_EntidadesRelaciones")]
+    partial class EntidadesRelaciones
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

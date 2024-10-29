@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CoWorkSpace.API.Migrations
 {
     /// <inheritdoc />
-    public partial class entidadesRelaciones : Migration
+    public partial class EntidadesRelaciones : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

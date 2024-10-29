@@ -1,0 +1,80 @@
+﻿
+
+
+@page "/miembros/create" 
+
+  
+
+@inject IRepository repository 
+
+  
+
+@inject NavigationManager navigationManager 
+
+  
+
+@inject SweetAlertService sweetAlertService 
+
+  
+
+  
+
+<h3>Miembros Create</h3> 
+
+  
+
+<MiembrosForm @ref="miembroForm"  Miembro="miembro" OnSubmit="Create" ReturnAction="Return" /> 
+
+  
+
+@code { 
+
+    private Miembro miembro = new(); 
+
+    private MiembrosForm miembroForm; 
+
+  
+
+  
+
+  
+
+    private async Task Create() 
+
+    { 
+
+  
+
+        var responseHttp = await repository.PostAsync("/api/miembros", miembro); 
+
+        if (responseHttp.Error) 
+
+        { 
+
+            var message = await responseHttp.GetErrorMessageAsync(); 
+
+            await sweetAlertService.FireAsync("Error", message); 
+
+            return; 
+
+        } 
+
+  
+
+        navigationManager.NavigateTo("/Miembros"); 
+
+    } 
+
+  
+
+    private void Return() 
+
+    { 
+
+        navigationManager.NavigateTo("/Miembros"); 
+
+    } 
+
+} 
+
+ 
