@@ -1,0 +1,61 @@
+﻿@page "/asignacions/create" 
+
+  
+
+@inject IRepository repository 
+
+  
+
+@inject NavigationManager navigationManager 
+
+  
+
+@inject SweetAlertService sweetAlertService 
+
+  
+
+  
+
+<h3>Asignacion Create</h3> 
+
+  
+
+<AsignacionsForm @ref="asignacionsForm"  asignacion="asignacion" OnSubmit="Create" ReturnAction="Return" /> 
+
+  
+
+@code { 
+
+    private Asignacion asignacion = new(); 
+
+    private AsignacionsForm asignacionsForm; 
+
+    private async Task Create() 
+
+    { 
+
+        var responseHttp = await repository.PostAsync("/api/asignacions", asignacion); 
+
+        if (responseHttp.Error) 
+
+        { 
+
+            var message = await responseHttp.GetErrorMessageAsync(); 
+
+            await sweetAlertService.FireAsync("Error", message); 
+
+            return; 
+
+        } 
+
+        navigationManager.NavigateTo("/asignacions"); 
+
+    } 
+
+    private void Return() 
+
+    { 
+        navigationManager.NavigateTo("/asignacions"); 
+    } 
+
+} 

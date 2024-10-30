@@ -1,0 +1,61 @@
+﻿@page "/membresias/create" 
+
+  
+
+@inject IRepository repository 
+
+  
+
+@inject NavigationManager navigationManager 
+
+  
+
+@inject SweetAlertService sweetAlertService 
+
+  
+
+  
+
+<h3>Membresia Create</h3> 
+
+  
+
+<MembresiasForm @ref="membresiaForm"  Membresia="membresia" OnSubmit="Create" ReturnAction="Return" /> 
+
+  
+
+@code { 
+
+    private Membresia membresia = new(); 
+
+    private MembresiasForm membresiaForm; 
+
+    private async Task Create() 
+
+    { 
+
+        var responseHttp = await repository.PostAsync("/api/membresias", membresia); 
+
+        if (responseHttp.Error) 
+
+        { 
+
+            var message = await responseHttp.GetErrorMessageAsync(); 
+
+            await sweetAlertService.FireAsync("Error", message); 
+
+            return; 
+
+        } 
+
+        navigationManager.NavigateTo("/Membresias"); 
+
+    } 
+
+    private void Return() 
+
+    { 
+        navigationManager.NavigateTo("/Membresias"); 
+    } 
+
+} 

@@ -1,0 +1,59 @@
+﻿@page "/reservas/create" 
+
+@inject IRepository repository 
+
+  
+
+@inject NavigationManager navigationManager 
+
+  
+
+@inject SweetAlertService sweetAlertService 
+
+  
+
+  
+
+<h3>Creacion de la Reserva</h3> 
+
+  
+
+<ReservasForm @ref="reservasForm"  reserva="reserva" OnSubmit="Create" ReturnAction="Return" /> 
+
+  
+
+@code { 
+
+    private Reserva reserva = new(); 
+
+    private ReservasForm reservasForm; 
+
+    private async Task Create() 
+
+    { 
+
+        var responseHttp = await repository.PostAsync("/api/reservas", reserva); 
+
+        if (responseHttp.Error) 
+
+        { 
+
+            var message = await responseHttp.GetErrorMessageAsync(); 
+
+            await sweetAlertService.FireAsync("Error", message); 
+
+            return; 
+
+        } 
+
+        navigationManager.NavigateTo("/reservas"); 
+
+    } 
+
+    private void Return() 
+
+    { 
+        navigationManager.NavigateTo("/reservas"); 
+    } 
+
+} 

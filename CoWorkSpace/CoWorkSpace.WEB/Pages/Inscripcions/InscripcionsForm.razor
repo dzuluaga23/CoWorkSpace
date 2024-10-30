@@ -1,0 +1,170 @@
+﻿@using CoWorkSpace.Shared.Entidades
+
+
+
+@inject SweetAlertService swal
+
+
+
+<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation"></NavigationLock>
+
+<EditForm EditContext="editContext" OnSubmit="OnSubmit">
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+
+        <label>ID MIEMBRO</label>
+
+
+
+        <div>
+
+            <!--cambiar el width y el parametro de la clase-->
+
+            <InputNumber style="width: 50px;"  @bind-Value="inscripcion.MiembroId" />
+
+            <ValidationMessage For="@(()=>inscripcion.MiembroId)" />
+
+
+
+        </div>
+
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>ID DEL EVENTO:</label>
+
+
+        <div>
+
+            <InputNumber style="width: 50px;" @bind-Value= "inscripcion.EventoId" />
+
+            <ValidationMessage For="@(()=>inscripcion.EventoId)" />
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+   
+    <button class="btn btn-primary" type="submit">Guardar</button>
+
+    <button class="btn btn-success" type="button" @onclick="ReturnAction">Regresar</button>
+
+
+</EditForm>
+
+
+@code {
+
+
+
+    //NOTA: SE CAMBIO EL BOTON DE REGRESAR
+
+
+
+    private EditContext editContext = null;
+
+
+
+    protected override void OnInitialized()
+
+    {
+
+        editContext = new(inscripcion);
+
+    }
+
+
+    [EditorRequired]
+
+    [Parameter]
+
+    public Inscripcion inscripcion { get; set; }
+
+
+    [EditorRequired]
+
+    [Parameter]
+
+    public EventCallback OnSubmit { get; set; }
+
+
+
+    [EditorRequired]
+
+    [Parameter]
+
+    public EventCallback ReturnAction { get; set; }
+
+
+    public bool FormPostedSuccessfully { get; set; } = true; // ESTO SE MODIFICO A TRUE
+
+
+
+
+
+    private async Task OnBeforeInternalNavigation(LocationChangingContext context)
+
+    {
+
+        var formWasEdited = editContext.IsModified();
+
+
+
+        if (!formWasEdited || FormPostedSuccessfully) //SE AGREGO ESTA LOGICA
+
+        {
+
+            return;
+
+        }
+
+
+
+        //EL PROBLEMA RADICA EN QUE NUNCA ENTRA AQUI Y EN LA WEB NO MUESTRA ESTE MENSAJE
+
+
+
+        var result = await swal.FireAsync(new SweetAlertOptions
+
+            {
+
+                Title = "Confirmación",
+
+                Text = "¿Deseas abandonar la página y perder los cambios?",
+
+                Icon = SweetAlertIcon.Warning,
+
+                ShowCancelButton = true
+
+            });
+
+
+
+        var confirm = !string.IsNullOrEmpty(result.Value);
+
+
+
+        if (confirm)
+
+        {
+
+            return;
+
+        }
+
+
+
+        context.PreventNavigation();
+
+    }
+
+}

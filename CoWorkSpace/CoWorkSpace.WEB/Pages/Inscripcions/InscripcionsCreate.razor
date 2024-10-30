@@ -1,0 +1,61 @@
+﻿@page "/inscripcions/create" 
+
+  
+
+@inject IRepository repository 
+
+  
+
+@inject NavigationManager navigationManager 
+
+  
+
+@inject SweetAlertService sweetAlertService 
+
+  
+
+  
+
+<h3>Inscripciones Create</h3> 
+
+  
+
+<InscripcionsForm @ref="inscripcionsForm"  inscripcion="inscripcion" OnSubmit="Create" ReturnAction="Return" /> 
+
+  
+
+@code { 
+
+    private Inscripcion inscripcion = new(); 
+
+    private InscripcionsForm inscripcionsForm; 
+
+    private async Task Create() 
+
+    { 
+
+        var responseHttp = await repository.PostAsync("/api/inscripcions", inscripcion); 
+
+        if (responseHttp.Error) 
+
+        { 
+
+            var message = await responseHttp.GetErrorMessageAsync(); 
+
+            await sweetAlertService.FireAsync("Error", message); 
+
+            return; 
+
+        } 
+
+        navigationManager.NavigateTo("/inscripcions"); 
+
+    } 
+
+    private void Return() 
+
+    { 
+        navigationManager.NavigateTo("/inscripcions"); 
+    } 
+
+} 
