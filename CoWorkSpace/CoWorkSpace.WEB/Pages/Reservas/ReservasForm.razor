@@ -56,6 +56,33 @@
             <ValidationMessage For="@(()=>reserva.HoraFinal)" />
 
 
+        </div>
+
+        <div class="mb-3">
+
+            <label>Id Del Miembro:</label>
+            <div>
+
+                <InputNumber style="width: 50px;" @bind-Value="reserva.MiembroId" />
+
+                <ValidationMessage For="@(()=>reserva.MiembroId)" />
+
+            </div>
+        </div>
+        <div class="mb-3">
+
+            <label>Id Del Espacio:</label>
+
+
+            <div>
+
+                <InputNumber style="width: 50px;" @bind-Value="reserva.EspacioId" />
+
+                <ValidationMessage For="@(()=>reserva.EspacioId)" />
+
+
+            </div>
+
 
         </div>
 

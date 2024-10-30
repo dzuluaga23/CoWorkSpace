@@ -1,7 +1,41 @@
 ﻿@page "/"
-
 <PageTitle>COWORK SPACE</PageTitle>
 
-<h1>BIENVENIDOS A COWORK SPACE</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoWork Space</title>
+    <style>
+        .centered-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; 
+            background: linear-gradient(180deg, #000000 0%, #0000ff 100%);
+            color: white; 
+            text-align: center;
+        }
 
-Un lugar mejor para tí y tu organización! 
+            .centered-box h1 {
+                padding: 20px;
+                border: 2px solid white; 
+                border-radius: 10px; 
+            }
+
+        .subtext {
+            align-self: flex-end; 
+            margin-top: 10px; 
+            margin-right: 20px; 
+        }
+    </style>
+</head>
+<body>
+    <div class="centered-box">
+        <h1>BIENVENIDOS A COWORK SPACE</h1>
+        <div class="subtext">Un lugar mejor para ti y tu organización!</div>
+    </div>
+</body>
+</html>

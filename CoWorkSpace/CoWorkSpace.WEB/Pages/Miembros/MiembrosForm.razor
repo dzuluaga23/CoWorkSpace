@@ -89,6 +89,19 @@
 
     </div>
 
+    <div class="mb-3">
+        <label>Tipo de Membresía:</label>
+        <div>
+            <InputSelect @bind-Value="Miembro.MembresiaId">
+                <option value="">Selecciona una membresía</option>
+                <option value="1">Básica</option>
+                <option value="2">Premium</option>
+                <!-- Agrega más opciones según tus tipos de membresía -->
+            </InputSelect>
+            <ValidationMessage For="@(() => Miembro.MembresiaId)" />
+        </div>
+    </div>
+
 
     <button class="btn btn-primary" type="submit">Guardar</button>
 
